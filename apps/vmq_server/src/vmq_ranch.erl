@@ -49,6 +49,9 @@ start_link(Ref, Transport, Opts) ->
 init(Ref, Parent, Transport, Opts) ->
     {ok, Socket} = ranch:handshake(Ref),
 
+    TransOpt = ranch:get_transport_options(Ref),
+    lager:debug("'~p~n','~p'",[Ref,TransOpt]),
+
     case peer_info(Socket, Transport, Opts) of
         {ok, {Peer, NewOpts}} ->
             FsmMod = proplists:get_value(fsm_mod, Opts, vmq_mqtt_pre_init),
